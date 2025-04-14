@@ -1,1 +1,222 @@
-<h1>Hello world</h1>
+# Inicializar Pygame
+pygame.init()
+
+# Definir constantes
+WIDTH, HEIGHT = 800, 600
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+FPS = 60
+
+# Configurar la pantalla
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('Business Game')
+
+# Definir la clase de empleado
+class Employee:
+    def __init__(self, name, cost, productivity):
+        self.name = name
+        self.cost = cost
+        self.productivity = productivity
+
+# Definir la clase de negocio
+class Business:
+    def __init__(self, name):
+        self.name = name
+        self.balance = 10000  # Dinero inicial
+        self.income = 1000  # Ingresos mensuales
+        self.expenses = 500  # Gastos mensuales
+        self.employees = []
+
+    def update_balance(self):
+        self.balance += self.income - self.expenses
+        for employee in self.employees:
+            self.balance += employee.productivity - employee.cost
+
+    def random_event(self):
+        event = random.choice(['good', 'bad', 'neutral'])
+        if event == 'good':
+            self.income += 200
+        elif event == 'bad':
+            self.expenses += 200
+
+    def hire_employee(self, employee):
+        self.employees.append(employee)
+        self.expenses += employee.cost
+
+# Definir la clase de competidor
+class Competitor:
+    def __init__(self, name):
+        self.name = name
+        self.balance = 10000  # Dinero inicial
+        self.income = 1000  # Ingresos mensuales
+        self.expenses = 500  # Gastos mensuales
+
+    def update_balance(self):
+        self.balance += self.income - self.expenses
+
+    def random_event(self):
+        event = random.choice(['good', 'bad', 'neutral'])
+        if event == 'good':
+            self.income += 200
+        elif event == 'bad':
+            self.expenses += 200
+
+# Definir la clase de misión
+class Mission:
+    def __init__(self, description, objective, reward):
+        self.description = description
+        self.objective = objective
+        self.reward = reward
+        self.completed = False
+
+    def check_completion(self, business):
+        if self.objective(business):
+            self.completed = True
+            return True
+        return False
+
+    def apply_reward(self, business):
+        if self.completed:
+            business.balance += self.reward
+
+# Definir la clase de botón
+class Button:
+    def __init__(self, x, y, w, h, color, text):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.color = color
+        self.text = text
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(self.text, True, BLACK)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+
+    def is_clicked(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                return True
+        return False
+
+# Definir la clase de ventana emergente
+class Popup:
+    def __init__(self, x, y, w, h, color, message):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.color = color
+        self.message = message
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(self.message, True, BLACK)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+
+    def is_clicked(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                return True
+        return False
+
+# Crear una instancia de negocio
+business = Business("Mi Negocio")
+
+# Crear algunos empleados
+employees = [
+    Employee("Alice", 300, 500),
+    Employee("Bob", 200, 400),
+    Employee("Charlie", 100, 300)
+]
+
+# Crear competidores
+competitors = [
+    Competitor("Competidor 1"),
+    Competitor("Competidor 2")
+]
+
+# Crear misiones
+missions = [
+    Mission("Aumenta tu balance a $15000", lambda b: b.balance >= 15000, 2000),
+    Mission("Contrata 3 empleados", lambda b: len(b.employees) >= 3, 1000)
+]
+
+# Crear botones
+buttons = [
+    Button(50, 500, 200, 50, GREEN, 'Aumentar Ingresos'),
+    Button(300, 500, 200, 50, RED, 'Aumentar Gastos'),
+    Button(550, 500, 200, 50, BLUE, 'Contratar Empleado')
+]
+
+# Crear una ventana emergente
+popup = None
+
+# Bucle principal del juego
+running = True
+clock = pygame.time.Clock()
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        if popup:
+            if popup.is_clicked(event):
+                popup = None
+        else:
+            for button in buttons:
+                if button.is_clicked(event):
+                    if button.text == 'Aumentar Ingresos':
+                        business.income += 100
+                    elif button.text == 'Aumentar Gastos':
+                        business.expenses += 100
+                    elif button.text == 'Contratar Empleado':
+                        employee = random.choice(employees)
+                        business.hire_employee(employee)
+                        popup = Popup(200, 200, 400, 200, BLUE, f'Contrataste a {employee.name}!')
+
+    # Actualizar el negocio
+    business.update_balance()
+    business.random_event()
+
+    # Actualizar competidores
+    for competitor in competitors:
+        competitor.update_balance()
+        competitor.random_event()
+
+    # Chequear y aplicar misiones
+    for mission in missions:
+        if mission.check_completion(business):
+            mission.apply_reward(business)
+
+    # Dibujar en la pantalla
+    screen.fill(WHITE)
+    font = pygame.font.Font(None, 36)
+    balance_text = font.render(f'Balance: ${business.balance}', True, BLACK)
+    screen.blit(balance_text, (20, 20))
+
+    # Dibujar balances de competidores
+    for i, competitor in enumerate(competitors):
+        competitor_text = font.render(f'{competitor.name}: ${competitor.balance}', True, BLACK)
+        screen.blit(competitor_text, (20, 60 + i * 40))
+
+    # Dibujar misiones
+    for i, mission in enumerate(missions):
+        mission_text = font.render(f'Misión: {mission.description} - {"Completada" if mission.completed else "En progreso"}', True, BLACK)
+        screen.blit(mission_text, (20, 140 + i * 40))
+
+    # Dibujar botones
+    for button in buttons:
+        button.draw(screen)
+
+    # Dibujar ventana emergente
+    if popup:
+        popup.draw(screen)
+
+    pygame.display.flip()
+    clock.tick(FPS)
+
+pygame.quit()

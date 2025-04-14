@@ -1,222 +1,148 @@
-# Inicializar Pygame
-pygame.init()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
-# Definir constantes
-WIDTH, HEIGHT = 800, 600
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-FPS = 60
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 
-# Configurar la pantalla
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Business Game')
+    <title>Calculadora de camellos - la original</title>
 
-# Definir la clase de empleado
-class Employee:
-    def __init__(self, name, cost, productivity):
-        self.name = name
-        self.cost = cost
-        self.productivity = productivity
+    <meta name="description" content="Aquí puedes calcular el valor en camellos de tu pareja.">
+    <meta name="author" content="Thomas Klaiber">
 
-# Definir la clase de negocio
-class Business:
-    def __init__(self, name):
-        self.name = name
-        self.balance = 10000  # Dinero inicial
-        self.income = 1000  # Ingresos mensuales
-        self.expenses = 500  # Gastos mensuales
-        self.employees = []
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    def update_balance(self):
-        self.balance += self.income - self.expenses
-        for employee in self.employees:
-            self.balance += employee.productivity - employee.cost
+    <link href="/css/normalize.css" rel="stylesheet">
+    <link href="/css/skeleton.css" rel="stylesheet">
+    <link href="/css/rangeslider.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
 
-    def random_event(self):
-        event = random.choice(['good', 'bad', 'neutral'])
-        if event == 'good':
-            self.income += 200
-        elif event == 'bad':
-            self.expenses += 200
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 
-    def hire_employee(self, employee):
-        self.employees.append(employee)
-        self.expenses += employee.cost
+    <meta property="og:site_name" content="Calculadora de camellos">
+        <meta property="og:title" content="¿Cuál es el valor en camellos de tu pareja?">
+    <meta property="og:description" content="Aquí puedes calcular el valor en camellos de tu pareja.">
+        
+        <meta property="og:url" content="https://kamelrechner.eu/">
+    <meta property="og:image" content="https://kamelrechner.eu/img/fb_image_standard.jpg">
+    <meta property="fb:app_id" content="210330259004526">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="de_DE">
 
-# Definir la clase de competidor
-class Competitor:
-    def __init__(self, name):
-        self.name = name
-        self.balance = 10000  # Dinero inicial
-        self.income = 1000  # Ingresos mensuales
-        self.expenses = 500  # Gastos mensuales
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://kamelrechner.eu/">
+    <meta name="twitter:title" content="Calculadora de camellos">
+    <meta name="twitter:description" content="Aquí puedes calcular el valor en camellos de tu pareja.">
+    <meta name="twitter:image" content="https://kamelrechner.eu/img/fb_image_standard.jpg">
 
-    def update_balance(self):
-        self.balance += self.income - self.expenses
+        <link rel="alternate" hreflang="de-de" href="/de">
+    <link rel="alternate" hreflang="en-us" href="/en">
+    <link rel="alternate" hreflang="es-es" href="/es">
+    <link rel="alternate" hreflang="ru-ru" href="/ru">
+    <link rel="alternate" hreflang="it-it" href="/it">
+    <link rel="alternate" hreflang="pl-pl" href="/pl">
+        
+    
+    <!-- Replaced by Google DSGVO Manager
+        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="b4f12665-7cd0-49f4-9e22-6693923ad08a" data-blockingmode="auto" type="text/javascript"></script> -->
 
-    def random_event(self):
-        event = random.choice(['good', 'bad', 'neutral'])
-        if event == 'good':
-            self.income += 200
-        elif event == 'bad':
-            self.expenses += 200
+    <script async src="https://fundingchoicesmessages.google.com/i/pub-4895506229266520?ers=1" nonce="Px5711DNmWyS7Ds3Cje8qQ"></script><script nonce="Px5711DNmWyS7Ds3Cje8qQ">(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
 
-# Definir la clase de misión
-class Mission:
-    def __init__(self, description, objective, reward):
-        self.description = description
-        self.objective = objective
-        self.reward = reward
-        self.completed = False
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" data-cookieconsent="marketing"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-4895506229266520",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+<body>
 
-    def check_completion(self, business):
-        if self.objective(business):
-            self.completed = True
-            return True
-        return False
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns">
+                <a href="/es" class="logo"><img src="/img/camel-logo-2.png"></a>
+                <h1>Calculadora de camellos</h1>
 
-    def apply_reward(self, business):
-        if self.completed:
-            business.balance += self.reward
+                <div class="lang-select">
+                                                <a href="/de"><img src="/img/flag-de.png" width="32"></a>
+                            <a href="/en"><img src="/img/flag-en.png" width="32"></a>
+                            <a href="/es"><img src="/img/flag-es.png" width="32"></a>
+                            <a href="/ru"><img src="/img/flag-ru.png" width="32"></a>
+                            <a href="/it"><img src="/img/flag-it.png" width="32"></a>
+                            <a href="/pl"><img src="/img/flag-pl.png" width="32"></a>
+                        
+                                    </div>
+            </div>
+        </div>
+    </div>
+</header>
 
-# Definir la clase de botón
-class Button:
-    def __init__(self, x, y, w, h, color, text):
-        self.rect = pygame.Rect(x, y, w, h)
-        self.color = color
-        self.text = text
+<div class="container">
+    <div class="row">
+        <div class="twelve columns">
+            <p class="welcome-text">Aquí puedes calcular el valor en camellos de tu pareja. Pero primero necesitamos algo de informacion sobre esa persona.</p>
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
-        font = pygame.font.Font(None, 36)
-        text_surface = font.render(self.text, True, BLACK)
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        screen.blit(text_surface, text_rect)
+            <div class="row">
+                <div class="six columns">
+                    <a href="/es/female" class="list-group-item clearfix">
+                        <img src="/img/select-woman.png" width="200">
+                        <span>¿Cuántos camellos valdría tu novia?</span></a>
+                </div>
+                <div class="six columns">
+                    <a href="/es/male" class="list-group-item clearfix">
+                        <img src="/img/select-man.png" width="200">
+                        <span>¿Cuántos camellos valdría tu novio?</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="longtext row">
+                <div class="six columns">
+    <h3>Camels as currency?</h3>
+    <p>In fact, camels as currency are said to come from Islam. At that time, not only camels, but also cows and silk robes were equated with a human life. Accordingly, a believing man was said to be worth up to 100 camels, and a believing woman about half that. At least this is how it was mentioned in the Koran. Therefore, the idiom of exchanging someone for camels has persisted to this day.</p>
+    <h3>Fun facts about camels</h3>
+    <p>Camels can drink for up to 38 minutes without stopping, taking in up to 135 liters of water. No wonder they are known as the "water reservoirs of the desert".
+    <br>Camels have third eyelids that help protect their eyes from sand and dust. These eyelids are semi-transparent and allow camels to see their surroundings while protecting their eyes.
+    <br>Camels are very talented flatulence machines. They produce so much gas in their digestive tract that they can fill entire tents with an unpleasant odor.    
+    </p>
+</div>
+<div class="six columns">
+    <h3>How does the camel calculator work?</h3>
+    <p>The camel calculator is designed like a quiz and calculates as a result how many camels you are worth. Based on your information about various characteristics such as age, size and hair color, the number of camels that you, your partner or your friends are worth is calculated. The results are not serious and are for entertainment purposes only.
+    </p> 
+</div>
+    </div>
+</div>
+<footer class="container">
+    <div class="row">
+        <div class="four columns">
+            <div class="fb-like" data-href="https://www.facebook.com/NerdMeet" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+        </div>
+        <div class="eight columns">
+            <p class="footline u-pull-right"><a href="/es/privacy">Política de privacidad</a> &middot; <a href="/es/imprint">Imprimir</a> &middot; <a class="mrnerd" href="https://www.facebook.com/NerdMeet">Mr. Nerd</a></p>
+        </div>
+    </div>
+</footer>
 
-    def is_clicked(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                return True
-        return False
+<script src="/js/jquery-1.12.4.min.js"></script>
+<script src="/js/fastclick.min.js"></script>
+<script src="/js/rangeslider.min.js"></script>
+<script src="/js/scripts.js"></script>
 
-# Definir la clase de ventana emergente
-class Popup:
-    def __init__(self, x, y, w, h, color, message):
-        self.rect = pygame.Rect(x, y, w, h)
-        self.color = color
-        self.message = message
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1MX7C96246" data-cookieconsent="statistics"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
-        font = pygame.font.Font(None, 36)
-        text_surface = font.render(self.message, True, BLACK)
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        screen.blit(text_surface, text_rect)
+  gtag('config', 'G-1MX7C96246');
+</script>
 
-    def is_clicked(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                return True
-        return False
-
-# Crear una instancia de negocio
-business = Business("Mi Negocio")
-
-# Crear algunos empleados
-employees = [
-    Employee("Alice", 300, 500),
-    Employee("Bob", 200, 400),
-    Employee("Charlie", 100, 300)
-]
-
-# Crear competidores
-competitors = [
-    Competitor("Competidor 1"),
-    Competitor("Competidor 2")
-]
-
-# Crear misiones
-missions = [
-    Mission("Aumenta tu balance a $15000", lambda b: b.balance >= 15000, 2000),
-    Mission("Contrata 3 empleados", lambda b: len(b.employees) >= 3, 1000)
-]
-
-# Crear botones
-buttons = [
-    Button(50, 500, 200, 50, GREEN, 'Aumentar Ingresos'),
-    Button(300, 500, 200, 50, RED, 'Aumentar Gastos'),
-    Button(550, 500, 200, 50, BLUE, 'Contratar Empleado')
-]
-
-# Crear una ventana emergente
-popup = None
-
-# Bucle principal del juego
-running = True
-clock = pygame.time.Clock()
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-        if popup:
-            if popup.is_clicked(event):
-                popup = None
-        else:
-            for button in buttons:
-                if button.is_clicked(event):
-                    if button.text == 'Aumentar Ingresos':
-                        business.income += 100
-                    elif button.text == 'Aumentar Gastos':
-                        business.expenses += 100
-                    elif button.text == 'Contratar Empleado':
-                        employee = random.choice(employees)
-                        business.hire_employee(employee)
-                        popup = Popup(200, 200, 400, 200, BLUE, f'Contrataste a {employee.name}!')
-
-    # Actualizar el negocio
-    business.update_balance()
-    business.random_event()
-
-    # Actualizar competidores
-    for competitor in competitors:
-        competitor.update_balance()
-        competitor.random_event()
-
-    # Chequear y aplicar misiones
-    for mission in missions:
-        if mission.check_completion(business):
-            mission.apply_reward(business)
-
-    # Dibujar en la pantalla
-    screen.fill(WHITE)
-    font = pygame.font.Font(None, 36)
-    balance_text = font.render(f'Balance: ${business.balance}', True, BLACK)
-    screen.blit(balance_text, (20, 20))
-
-    # Dibujar balances de competidores
-    for i, competitor in enumerate(competitors):
-        competitor_text = font.render(f'{competitor.name}: ${competitor.balance}', True, BLACK)
-        screen.blit(competitor_text, (20, 60 + i * 40))
-
-    # Dibujar misiones
-    for i, mission in enumerate(missions):
-        mission_text = font.render(f'Misión: {mission.description} - {"Completada" if mission.completed else "En progreso"}', True, BLACK)
-        screen.blit(mission_text, (20, 140 + i * 40))
-
-    # Dibujar botones
-    for button in buttons:
-        button.draw(screen)
-
-    # Dibujar ventana emergente
-    if popup:
-        popup.draw(screen)
-
-    pygame.display.flip()
-    clock.tick(FPS)
-
-pygame.quit()
+</body>
+</html>
